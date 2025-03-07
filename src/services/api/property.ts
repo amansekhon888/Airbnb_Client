@@ -7,8 +7,13 @@ export const propertyApi = apiSlice.injectEndpoints({
             query: () => "/property/all",
             transformResponse: (response: ApiResponse) => response.data,
             providesTags: ["Properties"]
+        }),
+        getPropertyById: builder.query({
+            query: (id) => `/property/${id}`,
+            transformResponse: (response: ApiResponse) => response.data,
+            providesTags: ["Property"]
         })
     }),
 });
 
-export const { useGetPropertiesQuery } = propertyApi;
+export const { useGetPropertiesQuery, useGetPropertyByIdQuery } = propertyApi;

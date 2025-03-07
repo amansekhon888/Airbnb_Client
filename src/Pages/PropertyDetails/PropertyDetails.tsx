@@ -3,12 +3,18 @@ import Slider from 'react-slick'
 import cate1 from "../../assets/images/cate1.png"
 import mapBg from "../../assets/images/mapBg.png"
 import locationPin from "../../assets/icons/locationPin.png"
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Close, FavoriteBorderOutlined, KeyboardArrowLeftOutlined, KeyboardArrowRightOutlined, ShareOutlined, StarRateRounded } from '@mui/icons-material';
-import BookingDetails from '../../Components/BookingDetails/BookingDetails';
+import PricingDetails from '../../Components/PricingDetails/PricingDetails';
 import { Rating } from '@mui/material';
+import { useGetPropertyByIdQuery } from '../../services/api/property'
 
 const PropertyDetails = () => {
+    const { id } = useParams()
+    console.log(id);
+    const { data, isLoading } = useGetPropertyByIdQuery(id)
+    console.log(data);
+
 
     // Slider reference
     const sliderRef = useRef<Slider | null>(null);
@@ -52,6 +58,8 @@ const PropertyDetails = () => {
             },
         ],
     };
+    if (isLoading) return <p>Loading...</p>;
+
     return (
         <div className='pb-14 md:pb-16'>
             <div className="container mx-auto">
@@ -66,30 +74,28 @@ const PropertyDetails = () => {
                     <div className="mt-4">
                         <div className="hidden lg:grid grid-cols-2 h-[350px] xl:h-[400px] gap-3 xl:gap-5">
                             {/* First Image */}
-                            <div className="h-[350px] xl:h-[400px] rounded-2xl overflow-hidden">
-                                <img src={cate1} alt="Property" className="h-full w-full object-cover" />
+                            <div className="h-[350px] xl:h-[400px] rounded-2xl overflow-hidden cursor-pointer" onClick={openModal}>
+                                <img src={data?.gallery[0]?.url} alt="Property" className="h-full w-full object-cover" />
                             </div>
 
                             {/* Next Images in Grid */}
                             <div className="grid grid-cols-2 gap-3 xl:gap-5 h-[350px] xl:h-[400px]">
-                                <div className="h-full rounded-2xl overflow-hidden">
-                                    <img src={cate1} alt={`Property Image`} className="h-full w-full object-cover" />
-                                </div>
-                                <div className="h-full rounded-2xl overflow-hidden">
-                                    <img src={cate1} alt={`Property Image`} className="h-full w-full object-cover" />
-                                </div>
-                                <div className="h-full rounded-2xl overflow-hidden">
-                                    <img src={cate1} alt={`Property Image`} className="h-full w-full object-cover" />
-                                </div>
-
-                                {/* "View All Photos" Overlay */}
-                                <div className="h-full rounded-2xl overflow-hidden relative cursor-pointer">
-                                    <img src={cate1} alt="Property" className="h-full w-full object-cover" />
-                                    <div className="absolute top-0 left-0 w-full h-full bg-[#151F2580] flex items-center justify-center flex-col" onClick={openModal}>
-                                        <p className="text-xl font-semibold text-white">4+</p>
-                                        <p className="text-white">View all photos</p>
+                                {data?.gallery?.slice(1, 4).map((img, i) => (
+                                    <div className="h-full rounded-2xl overflow-hidden cursor-pointer" onClick={openModal}>
+                                        <img src={img.url} alt={`Property Image`} className="h-full w-full object-cover" />
                                     </div>
-                                </div>
+                                ))}
+                                {data?.gallery.length > 4 &&
+                                    <div className="h-full rounded-2xl overflow-hidden relative cursor-pointer">
+                                        <img src={data?.gallery[4]?.url} alt={`Property Image`} className="h-full w-full object-cover" />
+                                        {data?.gallery.length > 5 &&
+                                            <div className="absolute top-0 left-0 w-full h-full bg-[#151F2580] flex items-center justify-center flex-col" onClick={openModal}>
+                                                <p className="text-xl font-semibold text-white">4+</p>
+                                                <p className="text-white">View all photos</p>
+                                            </div>
+                                        }
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>
@@ -130,18 +136,11 @@ const PropertyDetails = () => {
                         <button className="absolute top-1/2 left-3 -translate-y-1/2 w-8 h-8 flex items-center justify-center z-10 bg-primary rounded-full opacity-70 text-white hover:opacity-100 duration-300" onClick={Prev}><KeyboardArrowLeftOutlined /></button>
                         <button className="absolute top-1/2 right-3 -translate-y-1/2 w-8 h-8 flex items-center justify-center z-10 bg-primary rounded-full opacity-70 text-white hover:opacity-100 duration-300" onClick={Next}><KeyboardArrowRightOutlined /></button>
                         <Slider {...settings} ref={sliderRef}>
-                            <div className="h-[300px] sm:h-[400px]">
-                                <img src={cate1} className="h-full w-full object-cover" />
-                            </div>
-                            <div className="h-[300px] sm:h-[400px]">
-                                <img src={cate1} className="h-full w-full object-cover" />
-                            </div>
-                            <div className="h-[300px] sm:h-[400px]">
-                                <img src={cate1} className="h-full w-full object-cover" />
-                            </div>
-                            <div className="h-[300px] sm:h-[400px]">
-                                <img src={cate1} className="h-full w-full object-cover" />
-                            </div>
+                            {data?.gallery?.map((img, i) => (
+                                <div className="h-[300px] sm:h-[400px]">
+                                    <img src={img.url} className="h-full w-full object-cover" />
+                                </div>
+                            ))}
                         </Slider>
                     </div>
                 </div>
@@ -149,8 +148,9 @@ const PropertyDetails = () => {
                     <div>
                         <div className='flex justify-between items-start gap-6'>
                             <div className="text-text1">
-                                <h5 className="text-lg md:text-xl lg:text-2xl font-medium leading-6 mb-2">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Amet, culpa?</h5>
-                                <p className="flex items-start gap-2 mt-1 "><img src={locationPin} className="w-2.5 md:w-3 mt-1 md:mt-1.5" /><span className="text-sm md:text-base text-text3 w-full">1022 Al Wasl Road, The Palm Tower, Dubai, UAE, 00000</span></p>
+                                <h5 className="text-lg md:text-xl lg:text-2xl font-medium leading-6 mb-2">{data?.title}</h5>
+                                <p className="flex items-start gap-2 mt-1 "><img src={locationPin} className="w-2.5 md:w-3 mt-1 md:mt-1.5" /><span className="text-sm md:text-base text-text3 w-full capitalize"> {data?.address
+                                    && `${data.address.address}, ${data.address.city}${data.address.state ? `, ${data.address.state}` : ""}, ${data.address.country}, ${data.address.zip_code}`}</span></p>
                                 <div className="flex items-end gap-1.5 text-text1 mt-1">
                                     <span><StarRateRounded className='!text-lg' /></span>
                                     <span className="font-medium text-sm">4.5</span>
@@ -167,7 +167,7 @@ const PropertyDetails = () => {
                             </div>
                         </div>
                         <div className='mt-6 lg:hidden'>
-                            <BookingDetails />
+                            <PricingDetails data={data} />
                         </div>
                         <div className="lg:flex gap-10 relative">
                             <div className="w-full lg:w-[60%] xl:w-[70%]">
@@ -306,14 +306,14 @@ const PropertyDetails = () => {
                             </div>
                             <div className="hidden lg:block lg:w-[40%] xl:w-[30%]">
                                 <div className=' sticky top-[120px]'>
-                                    <BookingDetails />
+                                    <PricingDetails  data={data}  />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 

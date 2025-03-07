@@ -9,8 +9,8 @@ const PropertyCard = ({ property, index }) => {
         <>
             <div key={index} className="">
                 <div className="rounded-[20px] overflow-hidden h-[250px] relative border border-border1">
-                    <Link to="/property-details/1" className="w-full h-full">
-                        <img src={cate1} className="w-full h-full object-cover" />
+                    <Link to={`/property-details/${property._id}`} className="w-full h-full">
+                        <img src={property?.gallery[0]?.url} className="w-full h-full object-cover" />
                     </Link>
                     <button className="w-10 h-10 flex items-center justify-center border border-border1 absolute top-[-1px] right-[-1px] bg-white rounded-bl-[20px] text-[#EF272A]">
                         <FavoriteBorderOutlined />
@@ -22,7 +22,7 @@ const PropertyCard = ({ property, index }) => {
 
                 <div className='pt-3'>
                     <div className="flex items-start justify-between">
-                        <h4 className="text-xl font-medium text-text1 "><Link to="/property-details/1">{property.title}</Link></h4>
+                        <h4 className="text-xl font-medium text-text1 "><Link to={`/property-details/${property._id}`}>{property.title}</Link></h4>
                         {property.rating &&
                             <div className="flex items-center gap-1.5 text-text1">
                                 <span><StarRateRounded /></span>
