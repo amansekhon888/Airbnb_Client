@@ -14,6 +14,10 @@ import Notifications from "./Pages/Notifications/Notifications.tsx";
 import { ToastContainer } from 'react-toastify';
 import { useGetUserQuery } from "./services/apiSlice.ts";
 import { useEffect } from "react";
+import Messages from "./Pages/Messages/Messages.tsx";
+import HostWelcome from "./Pages/HostWelcome/HostWelcome.tsx";
+import HostDetails from "./Pages/HostDetails/HostDetails.tsx";
+import EditUserProfile from "./Pages/EditUserProfile/EditUserProfile.tsx";
 
 const App = () => {
   const token = localStorage.getItem('token');
@@ -43,7 +47,7 @@ const App = () => {
           element: <PropertyDetails />,
         },
         {
-          path: "/confirm-booking",
+          path: "/confirm-booking/:id",
           element: <ConfirmBooking />,
         },
         {
@@ -73,6 +77,22 @@ const App = () => {
         {
           path: "/notifications",
           element: <Notifications />,
+        },
+        {
+          path: "/user/:id",
+          element: <HostDetails />,
+        },
+        {
+          path: "/edit-profile",
+          element: <EditUserProfile />,
+        },
+        // {
+        //   path: "/become-host",
+        //   element: <HostWelcome />,
+        // },
+        {
+          path: "/messages",
+          element: <Messages />,
         },
       ]
     }

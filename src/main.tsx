@@ -8,11 +8,14 @@ import "slick-carousel/slick/slick-theme.css";
 import "flatpickr/dist/themes/material_blue.css";
 import { Provider } from 'react-redux';
 import { store } from './store/store.ts';
+import { AuthProvider } from './Context/AuthContext.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Provider store={store}>
-      <App />
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </Provider>
   </StrictMode>,
 )

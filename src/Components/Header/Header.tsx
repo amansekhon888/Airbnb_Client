@@ -5,12 +5,13 @@ import Modal from "../AuthModals"
 import { useContext, useEffect, useRef, useState } from 'react'
 import Flatpickr from "react-flatpickr"
 import { SearchProvider } from '../../Provider/SearchContext'
+import { useAuth } from '../../Context/AuthContext'
 
 const Header = () => {
     const context = useContext(SearchProvider);
     console.log("Header: ", context);
     const location = useLocation()
-    const [openModal, setOpenModal] = useState(false);
+    const { openModal, setOpenModal } = useAuth();
     const [showMonths, setShowMonths] = useState<number | undefined>(undefined);
     const [showGuest, setShowGuest] = useState(false);
     const [showSearch, setShowSearch] = useState(false);
@@ -53,6 +54,8 @@ const Header = () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
+    console.log(openModal);
+
 
     return (
         <>
@@ -240,7 +243,6 @@ const Header = () => {
                         </div>
                     </nav>
                 </div>
-                <Modal openModal={openModal} setOpenModal={setOpenModal} />
             </header>
         </>
     )

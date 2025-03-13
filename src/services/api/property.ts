@@ -12,8 +12,12 @@ export const propertyApi = apiSlice.injectEndpoints({
             query: (id) => `/property/${id}`,
             transformResponse: (response: ApiResponse) => response.data,
             providesTags: ["Property"]
+        }),
+        getCalculateBookingPrice: builder.query({
+            query: (data) => `/property/calculate-price/${data.propertyId}?checkIn=${data.checkIn}&checkOut=${data.checkOut}`,
+            transformResponse: (response: ApiResponse) => response.data,
         })
     }),
 });
 
-export const { useGetPropertiesQuery, useGetPropertyByIdQuery } = propertyApi;
+export const { useGetPropertiesQuery, useGetPropertyByIdQuery, useGetCalculateBookingPriceQuery } = propertyApi;

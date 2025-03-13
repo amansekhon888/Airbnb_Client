@@ -7,15 +7,10 @@ import Password from "./Password.tsx";
 import ForgotPassword from "./ForgotPassword.tsx";
 import ConfirmPassword from "./ConfirmPassword.tsx";
 import OtpVerify from "./OtpVerify.tsx";
+import { useAuth } from "../../Context/AuthContext.tsx";
 
-interface IndexProps {
-  title?: string;
-  openModal: boolean;
-  setOpenModal: (open: boolean) => void;
-  onBack?: () => void;
-}
-
-const Index = ({ openModal, setOpenModal }: IndexProps) => {
+const Index = () => {
+  const { isAuthenticated, openModal, setOpenModal } = useAuth();
   const [step, setStep] = useState("Login"); // Track current step
   const [formData, setFormData] = useState({
     number: "",
@@ -30,6 +25,10 @@ const Index = ({ openModal, setOpenModal }: IndexProps) => {
     setFormData({ number: "", email: "" });
     setMaskedContact("");
     setResetToken("");
+
+    if (!isAuthenticated) {
+      window.location.href = "/"; // Redirect to home if not logged in
+    }
   };
   const getTitle = () => {
     switch (step) {
@@ -47,7 +46,7 @@ const Index = ({ openModal, setOpenModal }: IndexProps) => {
         return {
           title: "OTP Verification",
           back: "ForgotPassword"
-        };;
+        };
       case "Password":
         return {
           title: "Log in",
