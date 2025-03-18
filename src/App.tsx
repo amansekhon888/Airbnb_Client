@@ -13,17 +13,14 @@ import AccountSettings from "./Pages/AccountSettings/AccountSettings.tsx";
 import Notifications from "./Pages/Notifications/Notifications.tsx";
 import { ToastContainer } from 'react-toastify';
 import { useGetUserQuery } from "./services/apiSlice.ts";
-import { useEffect } from "react";
 import Messages from "./Pages/Messages/Messages.tsx";
 import HostWelcome from "./Pages/HostWelcome/HostWelcome.tsx";
 import HostDetails from "./Pages/HostDetails/HostDetails.tsx";
 import EditUserProfile from "./Pages/EditUserProfile/EditUserProfile.tsx";
+import ProtectedRoute from "./Layout/ProtectedRoute.tsx";
 
 const App = () => {
-  const token = localStorage.getItem('token');
-  const { data: getUser, isLoading } = useGetUserQuery(token);
-
-  console.log(getUser);
+  const { data } = useGetUserQuery({});
 
   const router = createBrowserRouter([
     {
@@ -52,7 +49,7 @@ const App = () => {
         },
         {
           path: "/wishlists",
-          element: <Wishlists />,
+          element: <ProtectedRoute><Wishlists /></ProtectedRoute>,
         },
         {
           path: "/my-trips",

@@ -6,7 +6,6 @@ import { SearchContext } from "../../Provider/SearchContext";
 import { Link } from "react-router-dom";
 const Banner = () => {
     const context = useContext(SearchContext);
-    console.log(context);
 
     const [date, setDate] = useState<Date | string>("");
     const [showMonths, setShowMonths] = useState<number | undefined>(undefined);

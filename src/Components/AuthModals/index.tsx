@@ -7,10 +7,15 @@ import Password from "./Password.tsx";
 import ForgotPassword from "./ForgotPassword.tsx";
 import ConfirmPassword from "./ConfirmPassword.tsx";
 import OtpVerify from "./OtpVerify.tsx";
-import { useAuth } from "../../Context/AuthContext.tsx";
+import { useNavigate } from "react-router-dom";
+import { setOpenModal } from "../../services/slices/AuthSlice.ts";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store/store";
 
 const Index = () => {
-  const { isAuthenticated, openModal, setOpenModal } = useAuth();
+  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const { isAuthenticated, openModal } = useSelector((state: RootState) => state.auth);
   const [step, setStep] = useState("Login"); // Track current step
   const [formData, setFormData] = useState({
     number: "",
@@ -20,14 +25,18 @@ const Index = () => {
   const [resetToken, setResetToken] = useState("")
 
   const handleClose = () => {
-    setOpenModal(false);
+    dispatch(setOpenModal(false))
     setStep("Login");
     setFormData({ number: "", email: "" });
     setMaskedContact("");
     setResetToken("");
 
     if (!isAuthenticated) {
-      window.location.href = "/"; // Redirect to home if not logged in
+      const lastPath = sessionStorage.getItem("protectedPage");
+      sessionStorage.removeItem("protectedPage");
+      if (lastPath) {
+        navigate("/");
+      }
     }
   };
   const getTitle = () => {

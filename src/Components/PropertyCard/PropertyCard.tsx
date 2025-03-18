@@ -1,19 +1,39 @@
 import { FavoriteBorderOutlined, FavoriteOutlined, StarRateRounded } from '@mui/icons-material'
-import cate1 from "../../assets/images/cate1.png"
 import Bath from "../../assets/icons/Bath.png"
 import Bed from "../../assets/icons/Bed.png"
 import { Link } from 'react-router-dom'
+import useWishlist from '../../hooks/useWishlist'
 
-const PropertyCard = ({ property, index }) => {
+interface PropertyCardProps {
+    property: {
+        isWishlisted: boolean;
+        _id: string;
+        gallery: { url: string }[];
+        tags: string;
+        title: string;
+        rating?: number;
+        bedrooms: number;
+        bathrooms: number;
+        price_per_night: string;
+    };
+}
+
+const PropertyCard = ({ property }: PropertyCardProps) => {
+    const { isWishlisted, toggleWishlist } = useWishlist(property.isWishlisted, property._id);
+
     return (
         <>
-            <div key={index} className="">
+            <div className="">
                 <div className="rounded-[20px] overflow-hidden h-[250px] relative border border-border1">
                     <Link to={`/property-details/${property._id}`} target='_blank' className="w-full h-full">
                         <img src={property?.gallery[0]?.url} className="w-full h-full object-cover" />
                     </Link>
-                    <button className="w-10 h-10 flex items-center justify-center border border-border1 absolute top-[-1px] right-[-1px] bg-white rounded-bl-[20px] text-[#EF272A]">
-                        <FavoriteBorderOutlined />
+                    <button className="w-10 h-10 flex items-center justify-center border border-border1 absolute top-[-1px] right-[-1px] bg-white rounded-bl-[20px] text-[#EF272A]" onClick={toggleWishlist}>
+                        {isWishlisted ?
+                            <FavoriteOutlined />
+                            :
+                            <FavoriteBorderOutlined />
+                        }
                     </button>
                     <span className="w-max px-2.5 h-10 flex items-center justify-center border border-border1 absolute top-[-1px] left-[-1px] bg-white rounded-br-[20px] text-text1 text-sm font-medium capitalize min-w-14">
                         {property.tags}

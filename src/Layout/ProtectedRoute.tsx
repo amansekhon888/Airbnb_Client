@@ -1,19 +1,23 @@
 import { useEffect } from "react";
-import { Navigate, useLocation } from "react-router-dom";
-import { useAuth } from "./AuthContext";
+import { useDispatch, useSelector } from "react-redux";
+import { setOpenModal } from "../services/slices/AuthSlice";
+import { RootState } from "../store/store";
+import { useLocation } from "react-router-dom";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated, setOpenModal } = useAuth();
-  const location = useLocation();
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const dispatch = useDispatch();
+  const location = useLocation(); // ✅ Get current route
 
   useEffect(() => {
     if (!isAuthenticated) {
-      setOpenModal(true); // Open modal if user is not logged in
+      dispatch(setOpenModal(true)); // ✅ Open login modal
+      sessionStorage.setItem("protectedPage", location.pathname); // ✅ Save last attempted route
     }
-  }, [isAuthenticated, setOpenModal]);
+  }, [isAuthenticated, dispatch, location.pathname]);
 
   if (!isAuthenticated) {
-    return null; // Prevent rendering the protected component
+    return null; // ✅ Prevent rendering protected content
   }
 
   return children;

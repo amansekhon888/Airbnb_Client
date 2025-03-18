@@ -1,17 +1,19 @@
 import { Link, useLocation } from 'react-router-dom'
 import Logo from '../../assets/images/Logo.png'
 import { AccountCircleRounded, Add, CloseOutlined, LanguageOutlined, MenuOutlined, PlaceOutlined, Remove, SearchRounded } from '@mui/icons-material'
-import Modal from "../AuthModals"
 import { useContext, useEffect, useRef, useState } from 'react'
 import Flatpickr from "react-flatpickr"
 import { SearchProvider } from '../../Provider/SearchContext'
-import { useAuth } from '../../Context/AuthContext'
+import { useDispatch, useSelector } from 'react-redux'
+import { logout, setOpenModal } from '../../services/slices/AuthSlice'
+import { RootState } from '../../store/store'
 
 const Header = () => {
     const context = useContext(SearchProvider);
-    console.log("Header: ", context);
     const location = useLocation()
-    const { openModal, setOpenModal } = useAuth();
+    const dispatch = useDispatch();
+    const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+
     const [showMonths, setShowMonths] = useState<number | undefined>(undefined);
     const [showGuest, setShowGuest] = useState(false);
     const [showSearch, setShowSearch] = useState(false);
@@ -54,7 +56,6 @@ const Header = () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
-    console.log(openModal);
 
 
     return (
@@ -197,36 +198,45 @@ const Header = () => {
                                         <ul className="flex flex-col bg-white rounded-xl shadow-[0px_4px_20px_0px_#151F2533] py-2  min-w-[180px]">
 
                                             {/* If Login */}
-                                            <li className='text-sm cursor-pointer text-text1 hover:text-primary hover:bg-gray-50 px-4 py-2 font-medium'>
-                                                <Link to="/">Message</Link>
-                                            </li>
-                                            <li className='text-sm cursor-pointer text-text1 hover:text-primary hover:bg-gray-50 px-4 py-2 font-medium'>
-                                                <Link to="/">Notifications</Link>
-                                            </li>
-                                            <li className='text-sm cursor-pointer text-text1 hover:text-primary hover:bg-gray-50 px-4 py-2 font-medium'>
-                                                <Link to="/my-trips">Trips</Link>
-                                            </li>
-                                            <li className='text-sm cursor-pointer text-text1 hover:text-primary hover:bg-gray-50 px-4 py-2 font-medium'>
-                                                <Link to="/wishlists">Wishlists</Link>
-                                            </li>
+                                            {isAuthenticated &&
+                                                <>
+                                                    <li className='text-sm cursor-pointer text-text1 hover:text-primary hover:bg-gray-50 px-4 py-2 font-medium'>
+                                                        <Link to="/">Message</Link>
+                                                    </li>
+                                                    <li className='text-sm cursor-pointer text-text1 hover:text-primary hover:bg-gray-50 px-4 py-2 font-medium'>
+                                                        <Link to="/">Notifications</Link>
+                                                    </li>
+                                                    <li className='text-sm cursor-pointer text-text1 hover:text-primary hover:bg-gray-50 px-4 py-2 font-medium'>
+                                                        <Link to="/my-trips">Trips</Link>
+                                                    </li>
+                                                    <li className='text-sm cursor-pointer text-text1 hover:text-primary hover:bg-gray-50 px-4 py-2 font-medium'>
+                                                        <Link to="/wishlists">Wishlists</Link>
+                                                    </li>
+                                                </>
+                                            }
+                                            {!isAuthenticated &&
+                                                <li
+                                                    className="text-sm cursor-pointer text-text1 hover:text-primary hover:bg-gray-50 px-4 py-2"
+                                                    onClick={() => dispatch(setOpenModal(true))}
+                                                >
+                                                    Log in / Sign up
+                                                </li>
+                                            }
 
-                                            <li
-                                                className="text-sm cursor-pointer text-text1 hover:text-primary hover:bg-gray-50 px-4 py-2"
-                                                onClick={() => setOpenModal(true)}
-                                            >
-                                                Log in / Sign up
-                                            </li>
-
-                                            <hr className='my-1 border-border1' />
-                                            <li className='text-sm cursor-pointer text-text1 hover:text-primary hover:bg-gray-50 px-4 py-2'>
-                                                <Link to="/">Rent your home</Link>
-                                            </li>
-                                            <li className='text-sm cursor-pointer text-text1 hover:text-primary hover:bg-gray-50 px-4 py-2'>
-                                                <Link to="/">Host an experience</Link>
-                                            </li>
-                                            <li className='text-sm cursor-pointer text-text1 hover:text-primary hover:bg-gray-50 px-4 py-2'>
-                                                <Link to="/account-settings">Account</Link>
-                                            </li>
+                                            {isAuthenticated &&
+                                                <>
+                                                    <hr className='my-1 border-border1' />
+                                                    <li className='text-sm cursor-pointer text-text1 hover:text-primary hover:bg-gray-50 px-4 py-2'>
+                                                        <Link to="/">Rent your home</Link>
+                                                    </li>
+                                                    <li className='text-sm cursor-pointer text-text1 hover:text-primary hover:bg-gray-50 px-4 py-2'>
+                                                        <Link to="/">Host an experience</Link>
+                                                    </li>
+                                                    <li className='text-sm cursor-pointer text-text1 hover:text-primary hover:bg-gray-50 px-4 py-2'>
+                                                        <Link to="/account-settings">Account</Link>
+                                                    </li>
+                                                </>
+                                            }
 
                                             {/* If Login */}
                                             <hr className='my-1 border-border1' />
@@ -234,7 +244,7 @@ const Header = () => {
                                                 <Link to="/">Help center</Link>
                                             </li>
                                             <li className='text-sm cursor-pointer text-text1 hover:text-primary hover:bg-gray-50 px-4 py-2'>
-                                                <Link to="/">Log out</Link>
+                                                <button onClick={() => dispatch(logout())}>Log out</button>
                                             </li>
                                         </ul>
                                     </div>
@@ -242,8 +252,8 @@ const Header = () => {
                             </div>
                         </div>
                     </nav>
-                </div>
-            </header>
+                </div >
+            </header >
         </>
     )
 }

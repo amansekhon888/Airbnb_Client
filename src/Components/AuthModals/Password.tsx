@@ -2,26 +2,29 @@ import { VisibilityOffOutlined, VisibilityOutlined } from '@mui/icons-material'
 import React, { useState } from 'react'
 import { useLoginMutation } from '../../services/apiSlice';
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { setIsAuthenticated, setOpenModal } from '../../services/slices/AuthSlice';
 
 interface ApiError {
     data?: { message?: string };
     status?: number;
 }
-const Password = ({ setStep, formData, setOpenModal }: { setStep: (step: string) => void; formData: { number: string; email: string }; setOpenModal: (open: boolean) => void }) => {
+const Password = ({ setStep, formData }: { setStep: (step: string) => void; formData: { number: string; email: string }; setOpenModal: (open: boolean) => void }) => {
     const [showPassword, setShowPassword] = useState(false)
     const handleshowPassword = () => setShowPassword(!showPassword)
     const [password, setPassword] = useState("")
     const [login] = useLoginMutation()
+    const dispatch = useDispatch()
 
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const data = { email: formData.email, number: formData.number, password }
         console.log(data);
         try {
-            const res = await login(data).unwrap();
-            console.log(res);
+            const res = await login(data).unwrap()
             localStorage.setItem('token', res.token)
-            setOpenModal(false)
+            dispatch(setIsAuthenticated(true));
+            dispatch(setOpenModal(false))
         } catch (error) {
             const apiError = error as ApiError;
             toast.error(apiError?.data?.message || "Something went wrong. Please try again.")
