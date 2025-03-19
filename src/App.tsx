@@ -80,7 +80,7 @@ const App = () => {
           element: <HostDetails />,
         },
         {
-          path: "/edit-profile",
+          path: "/user/edit/:id",
           element: <EditUserProfile />,
         },
         // {

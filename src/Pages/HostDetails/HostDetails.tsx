@@ -87,7 +87,17 @@ const HostDetails = () => {
                         <div className="">
                             <div className="flex flex-col md:flex-row sm:items-center justify-start gap-4 sm:gap-6 text-center sm:text-left ">
                                 <div className="md:w-min sm:w-full self-center md:self-start">
-                                    <img src="https://a0.muscache.com/im/pictures/user/34656693-9731-424b-8018-e7faf0d91968.jpg?im_w=240&im_format=avif" className="rounded-full min-w-32 w-32" />
+                                    <span className="min-w-32 w-32 h-32 inline-block border border-primary rounded-full p-2">
+                                        {data.user.avatar?.url ?
+                                            <img src={data.user.avatar?.url} className="rounded-full w-full h-full object-cover" />
+                                            :
+                                            <span className="w-full h-full bg-primary rounded-full p-2 flex items-center justify-center">
+                                                <span className="text-5xl font-semibold uppercase text-white">
+                                                    {data.user.first_name.charAt(0)}
+                                                </span>
+                                            </span>
+                                        }
+                                    </span>
                                 </div>
                                 <div>
                                     <div>
@@ -133,7 +143,7 @@ const HostDetails = () => {
                         </div>
                         {data.isSelfDetails &&
                             <div className="">
-                                <button className="btn1 text-nowrap">Edit Profile</button>
+                                <Link to={`/user/edit/${id}`} className="btn1 text-nowrap flex items-center justify-center">Edit Profile</Link>
                             </div>
                         }
                     </div>
@@ -234,7 +244,7 @@ const PropertyCard = ({ property }: { property: Property }) => {
         <div>
             <div className="rounded-[20px] overflow-hidden h-[200px] xl:h-[250px] relative border border-border1">
                 <Link to={`/property-details/${property._id}`} className="w-full h-full block">
-                    <img src={property.gallery[0]?.url} className="w-full h-full object-cover" alt="property" />
+                    <img src={property.gallery.find((image) => image.isPrimary).url} className="w-full h-full object-cover" alt="property" />
                 </Link>
             </div>
 

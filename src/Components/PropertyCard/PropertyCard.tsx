@@ -26,7 +26,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
             <div className="">
                 <div className="rounded-[20px] overflow-hidden h-[250px] relative border border-border1">
                     <Link to={`/property-details/${property._id}`} target='_blank' className="w-full h-full">
-                        <img src={property?.gallery[0]?.url} className="w-full h-full object-cover" />
+                        <img src={property.gallery.find((image) => image.isPrimary).url} className="w-full h-full object-cover" />
                     </Link>
                     <button className="w-10 h-10 flex items-center justify-center border border-border1 absolute top-[-1px] right-[-1px] bg-white rounded-bl-[20px] text-[#EF272A]" onClick={toggleWishlist}>
                         {isWishlisted ?

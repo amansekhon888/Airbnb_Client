@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { setIsAuthenticated, setOpenModal } from './slices/AuthSlice';
+import { ApiResponse } from '../Types/ApiResponse';
 
 const baseQuery = fetchBaseQuery({
     baseUrl: 'http://localhost:3008/api',
@@ -37,6 +38,7 @@ export const apiSlice = createApi({
                 method: 'GET',
             }),
             providesTags: ['User'],
+            transformResponse: (response: ApiResponse) => response.data,
         }),
         login: builder.mutation({
             query: (data) => ({
@@ -75,7 +77,23 @@ export const apiSlice = createApi({
                 body: data,
             }),
         }),
-    }),
+        UpdateUser: builder.mutation({
+            query: (data) => ({
+                url: '/users/update',
+                method: 'PUT',
+                body: data,
+            }),
+            invalidatesTags: ['User'],
+            transformResponse: (response: ApiResponse) => response.data,
+        }),
+        uploadSingleImage: builder.mutation({
+            query: (formData) => ({
+                url: `/upload-single`,
+                method: 'POST',
+                body: formData,
+            }),
+        }),
+    })
 })
 
-export const { useLoginMutation, useVerifyMutation, useGetUserQuery, useForgotPasswordMutation, useOtpVerifyMutation, useResetPasswordMutation } = apiSlice
+export const { useLoginMutation, useVerifyMutation, useGetUserQuery, useForgotPasswordMutation, useOtpVerifyMutation, useResetPasswordMutation, useUpdateUserMutation, useUploadSingleImageMutation } = apiSlice

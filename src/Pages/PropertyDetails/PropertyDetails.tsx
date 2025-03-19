@@ -122,21 +122,12 @@ const PropertyDetails = () => {
                                                     <button className="absolute top-1/2 -left-12 -translate-y-1/2 w-8 h-8 flex items-center justify-center z-10 bg-primary rounded-full opacity-70 text-white hover:opacity-100 duration-300" onClick={Prev}><KeyboardArrowLeftOutlined /></button>
                                                     <button className="absolute top-1/2 -right-12 -translate-y-1/2 w-8 h-8 flex items-center justify-center z-10 bg-primary rounded-full opacity-70 text-white hover:opacity-100 duration-300" onClick={Next}><KeyboardArrowRightOutlined /></button>
                                                     <Slider {...settings} ref={sliderRef}>
-                                                        <div className="h-[500px]">
-                                                            <img src={cate1} className="h-full w-full object-cover" />
-                                                        </div>
-                                                        <div className="h-[500px]">
-                                                            <img src={cate1} className="h-full w-full object-cover" />
-                                                        </div>
-                                                        <div className="h-[500px]">
-                                                            <img src={cate1} className="h-full w-full object-cover" />
-                                                        </div>
-                                                        <div className="h-[500px]">
-                                                            <img src={cate1} className="h-full w-full object-cover" />
-                                                        </div>
-                                                        <div className="h-[500px]">
-                                                            <img src={cate1} className="h-full w-full object-cover" />
-                                                        </div>
+
+                                                        {data?.gallery?.map((img, i) => (
+                                                            <div className="h-[500px]" key={i}>
+                                                                <img src={img.url} className="h-full w-full object-cover" />
+                                                            </div>
+                                                        ))}
                                                     </Slider>
                                                 </div>
                                             </div>
@@ -147,7 +138,7 @@ const PropertyDetails = () => {
                                         <button className="absolute top-1/2 right-3 -translate-y-1/2 w-8 h-8 flex items-center justify-center z-10 bg-primary rounded-full opacity-70 text-white hover:opacity-100 duration-300" onClick={Next}><KeyboardArrowRightOutlined /></button>
                                         <Slider {...settings} ref={sliderRef}>
                                             {data?.gallery?.map((img, i) => (
-                                                <div className="h-[300px] sm:h-[400px]">
+                                                <div className="h-[300px] sm:h-[400px]" key={i}>
                                                     <img src={img.url} className="h-full w-full object-cover" />
                                                 </div>
                                             ))}
