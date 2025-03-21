@@ -6,6 +6,7 @@ export const propertyApi = apiSlice.injectEndpoints({
         getUsersDetails: builder.query({
             query: (id) => `/users/${id}`,
             transformResponse: (response: ApiResponse) => response.data,
+            providesTags: ["UserStats"]
         }),
     }),
 });

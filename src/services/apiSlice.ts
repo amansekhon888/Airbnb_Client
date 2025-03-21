@@ -30,7 +30,7 @@ const baseQueryWithAuth = async (args, api, extraOptions) => {
 export const apiSlice = createApi({
     reducerPath: 'apiSlice',
     baseQuery: baseQueryWithAuth,
-    tagTypes: ['User', 'verify', 'Properties', "Property", "Wishlist"],
+    tagTypes: ['User', 'verify', 'Properties', "Property", "Wishlist", "UserStats"],
     endpoints: (builder) => ({
         getUser: builder.query({
             query: () => ({
@@ -83,7 +83,7 @@ export const apiSlice = createApi({
                 method: 'PUT',
                 body: data,
             }),
-            invalidatesTags: ['User'],
+            invalidatesTags: ['User', 'UserStats'],
             transformResponse: (response: ApiResponse) => response.data,
         }),
         uploadSingleImage: builder.mutation({
@@ -92,6 +92,7 @@ export const apiSlice = createApi({
                 method: 'POST',
                 body: formData,
             }),
+            transformResponse: (response: ApiResponse) => response.data,
         }),
     })
 })

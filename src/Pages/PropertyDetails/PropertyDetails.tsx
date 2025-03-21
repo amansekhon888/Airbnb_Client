@@ -60,6 +60,12 @@ const PropertyDetails = () => {
                 },
             },
         ],
+    }; const labels: { [index: string]: string } = {
+        1: 'Poor',
+        2: 'Poor+',
+        3: 'Ok',
+        4: 'Good',
+        5: 'Excellent',
     };
     return (
         <div className='pb-14 md:pb-16'>
@@ -154,8 +160,8 @@ const PropertyDetails = () => {
                                                     && `${data.address.address}, ${data.address.city}${data.address.state ? `, ${data.address.state}` : ""}, ${data.address.country}, ${data.address.zip_code}`}</span></p>
                                                 <div className="flex items-end gap-1.5 text-text1 mt-1">
                                                     <span><StarRateRounded className='!text-lg' /></span>
-                                                    <span className="font-medium text-sm">4.5</span>
-                                                    <span className="font-medium text-sm border-b border-text1">(8 Reviews)</span>
+                                                    <span className="font-medium text-sm">{data.avgRating}</span>
+                                                    <span className="font-medium text-sm border-b border-text1">({data.reviews.length} Reviews)</span>
                                                 </div>
                                             </div>
                                             <div className='flex items-center justify-end gap-3'>
@@ -251,36 +257,39 @@ const PropertyDetails = () => {
                                                     <hr className='border-border1 my-8' />
                                                     <div className=''>
                                                         <div className='flex items-center justify-between gap-2'>
-                                                            <h4 className='text-2xl font-semibold'>Reviews (8)</h4>
-                                                            <div><span className='inline-block bg-[#34C759] px-2 py-1 text-white rounded font-medium text-sm'>4.0</span> <span className='text-lg font-medium'>Good</span></div>
+                                                            <h4 className='text-2xl font-semibold'>Reviews ({data.reviews.length})</h4>
+                                                            <div><span className='inline-block bg-[#34C759] px-2 py-1 text-white rounded font-medium text-sm'>4.0</span> <span className='text-lg font-medium'>{labels[data.avgRating]}</span></div>
                                                         </div>
                                                         <div className='mt-4'>
                                                             <div className='grid md:grid-cols-2 gap-4'>
-                                                                {Array(4).fill(0).map((i) => (
-                                                                    <div className='p-4 border border-border1 rounded-xl'>
+                                                                {data.reviews.map((review, i) => (
+                                                                    <div className='p-4 border border-border1 rounded-xl' key={i}>
                                                                         <div className='flex items-start justify-between gap-2'>
                                                                             <div className='flex gap-3 items-start'>
                                                                                 <div className='w-11 h-11 rounded bg-gray-600'>
+                                                                                    <img src={review.userId.avatar.url} className='w-full h-full object-cover rounded' />
                                                                                 </div>
                                                                                 <div>
-                                                                                    <p className='text-text1 font-medium'>Lora Smith</p>
+                                                                                    <p className='text-text1 font-medium capitalize'><Link to={`/user/${review.userId._id}`}>{review.userId.first_name} {review.userId.last_name}</Link></p>
                                                                                     <div>
-                                                                                        <Rating name="read-only" value={4} readOnly
+                                                                                        <Rating name="read-only" value={review.rating} readOnly
                                                                                             size='small' />
                                                                                     </div>
                                                                                 </div>
 
                                                                             </div>
-                                                                            <span className='text-text3 text-sm'>13/03/2022</span>
+                                                                            <span className='text-text3 text-sm'>{new Date(review.createdAt).toISOString().split("T")[0]}</span>
                                                                         </div>
                                                                         <p className='text-text1 mt-3'>“It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.”</p>
                                                                     </div>
                                                                 ))}
                                                             </div>
                                                         </div>
-                                                        <div className='mt-8'>
-                                                            <button className='border border-primary text-primary rounded-md py-2.5 px-4 hover:text-white hover:bg-primary hover:border-primary duration-300 font-medium'>View all 8 reviews</button>
-                                                        </div>
+                                                        {data.reviews.length > 4 &&
+                                                            <div className='mt-8'>
+                                                                <button className='border border-primary text-primary rounded-md py-2.5 px-4 hover:text-white hover:bg-primary hover:border-primary duration-300 font-medium'>View all 8 reviews</button>
+                                                            </div>
+                                                        }
                                                     </div>
                                                     <hr className='border-border1 my-8' />
                                                     <div className=''>

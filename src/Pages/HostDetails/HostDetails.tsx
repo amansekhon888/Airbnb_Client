@@ -101,7 +101,7 @@ const HostDetails = () => {
                                 </div>
                                 <div>
                                     <div>
-                                        <span className="text-sm font-medium bg-primary bg-opacity-10 text-primary px-2 py-1 rounded">Host</span>
+                                        <span className="text-sm font-medium bg-primary bg-opacity-10 text-primary px-2 py-1 rounded">{data.user.isHost ? "Host" : "Guest"}</span>
                                         <h4 className="text-2xl font-semibold mt-1 capitalize">{data.user.first_name} {data.user.last_name}</h4>
                                         <div className="mt-1 text-text1 font-medium flex items-center justify-center sm:justify-start gap-2">
                                             <div className="flex items-center gap-2">
@@ -131,11 +131,24 @@ const HostDetails = () => {
                                                     <CancelOutlined className="!text-lg text-red-500" />
                                                 } Phone number
                                             </li>
-                                            {data.user.languages.length ?
-                                                <li className="flex items-center gap-1">
-                                                    <LanguageOutlined className="!text-lg text-green-500" /> Speaks English and Hindi
-                                                </li> : ""
-                                            }
+                                            {data.user.languages.length > 0 && (
+                                                <li className="flex items-center gap-1 relative group">
+                                                    <LanguageOutlined className="!text-lg text-green-500" />
+                                                    <span>
+                                                        Speaks {data.user.languages.slice(0, 2).join(`${data.user.languages.length > 2 ? ", " : " and "}`)}
+                                                        {data.user.languages.length > 2 && `, +1`}
+                                                    </span>
+
+                                                    {/* Tooltip for full list of languages */}
+                                                    {data.user.languages.length > 2 && (
+                                                        <div className="absolute left-0 top-full mt-1 hidden group-hover:block bg-gray-800 text-white text-sm p-2 rounded shadow-lg">
+                                                            {data.user.languages.join(", ")}
+                                                        </div>
+                                                    )}
+                                                </li>
+                                            )}
+
+
                                         </ul>
                                     </div>
                                 </div>
@@ -149,8 +162,7 @@ const HostDetails = () => {
                     </div>
                     <div className="about mt-10">
                         <h4 className="text-2xl font-semibold">About Paul</h4>
-                        <p className="mt-3 text-text1 text-sm md:text-base">Hey, lorem ipsum dolor sit amet consectetur. Placerat eu eu egestas id tellus. Nec orci ultrices felis sit tellus commodo at. Eu sit ante aliquam adipiscing euismod orci lacus. Nisl cras praesent proin sed sed. Volutpat adipiscing at gravida cursus faucibus interdum lorem volutpat ac. Viverra dictumst amet bibendum tortor. Massa massa mattis purus sit vestibulum suspendisse convallis risus.</p>
-                        <p className="mt-3 text-text1 text-sm md:text-base">Hey, lorem ipsum dolor sit amet consectetur. Placerat eu eu egestas id tellus. Nec orci ultrices felis sit tellus commodo at. Eu sit ante aliquam adipiscing euismod orci lacus. Nisl cras praesent proin sed sed. Volutpat adipiscing at gravida cursus faucibus interdum lorem volutpat ac. Viverra dictumst amet bibendum tortor. Massa massa mattis purus sit vestibulum suspendisse convallis risus.</p>
+                        <p className="mt-3 text-text1 text-sm md:text-base">{data.user.bio}</p>
                     </div>
                     <hr className="border-border1 my-8" />
                     <div className="reviews">

@@ -20,7 +20,6 @@ import EditUserProfile from "./Pages/EditUserProfile/EditUserProfile.tsx";
 import ProtectedRoute from "./Layout/ProtectedRoute.tsx";
 
 const App = () => {
-  const { data } = useGetUserQuery({});
 
   const router = createBrowserRouter([
     {
@@ -36,7 +35,7 @@ const App = () => {
           element: <Home />,
         },
         {
-          path: "/property-list",
+          path: "/properties",
           element: <PropertyList />,
         },
         {

@@ -6,7 +6,7 @@ export const propertyApi = apiSlice.injectEndpoints({
         getProperties: builder.query({
             query: () => "/property/all",
             transformResponse: (response: ApiResponse) => response.data,
-            providesTags: ["Properties","User"]
+            providesTags: ["Properties", "User"]
         }),
         getPropertyById: builder.query({
             query: (id) => `/property/${id}`,
@@ -38,7 +38,11 @@ export const propertyApi = apiSlice.injectEndpoints({
             transformResponse: (response: ApiResponse) => response.data,
             invalidatesTags: ["Properties", "Property", "Wishlist"]
         }),
+        searchProperties: builder.query({
+            query: (queries) => `/search?${queries}`,
+            transformResponse: (response: ApiResponse) => response.data,
+        })
     }),
 });
 
-export const { useGetPropertiesQuery, useGetPropertyByIdQuery, useGetCalculateBookingPriceQuery, useAddWishlistMutation, useRemoveWishlistMutation, useGetWishlistItemsQuery } = propertyApi;
+export const { useGetPropertiesQuery, useGetPropertyByIdQuery, useGetCalculateBookingPriceQuery, useAddWishlistMutation, useRemoveWishlistMutation, useGetWishlistItemsQuery, useSearchPropertiesQuery } = propertyApi;
